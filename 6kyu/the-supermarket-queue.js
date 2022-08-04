@@ -28,3 +28,43 @@
 // N.B. You should assume that all the test input will be valid, as specified above.
 
 
+// The solution 
+function queueTime(customers, n) {
+    if(customers.length ==0 ) return 0
+    if(n>customers.length) n= customers.length
+    customers.splice(0,n).forEach((el,ind)=>this['arr'+ind] = el)
+    let arr = []    
+    for(let i =0;i<n;i++){
+            arr.push(this['arr'+i])
+        }
+    for(let j =0;j<customers.length;j++){
+        arr.sort((a,b)=>a-b)
+        arr[0]+=customers[j]
+    }
+    return Math.max(...arr)
+}
+
+// The solution 2
+function queueTime(customers, n) {
+    var w = new Array(n).fill(0);
+    for (let t of customers) {
+      let idx = w.indexOf(Math.min(...w));
+      w[idx] += t;
+    }
+    return Math.max(...w);
+  }
+
+  // The solution 3
+  function queueTime(customers, registers) {
+    let arr = [];
+  
+    for(let i = 0; i < registers; i++)
+      arr[i] = 0;
+  
+    for(let i = 0; i < customers.length; i++) {
+      arr[0] += customers[i];
+      arr.sort((a, b) => a - b);
+    }
+  
+    return arr[arr.length - 1];
+  }
