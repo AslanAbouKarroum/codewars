@@ -19,9 +19,7 @@
 
 // The solution
 function solution(number){
-    // convert the number to a roman numeral
   var  roman = {M:1000,CM:900, D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1 }
-  
   var ans = '';
   while(number>0){
       for(a in roman){ 
@@ -58,4 +56,29 @@ function solution(number){
       
       return prev;
     }, '');
+  }
+
+  // The solution 3
+  function solution(number){
+    let romanArr = ['I','IV','V','IX','X','XL','L','XC','C','CD','D','CM','M'];
+    let numberArr = [1,4,5,9,10,40,50,90,100,400,500,900,1000];
+    let roman = '';
+    let restNumber = 0;
+    while(number){
+        if(number>=1000){
+            let multi = Math.floor(number/1000)
+            roman += 'M'.repeat(multi)
+            number -= 1000*multi
+        }else{
+            for(let i=0;i<numberArr.length;i++){
+                if(number<numberArr[i]){
+                    number -= numberArr[i-1];
+                    restNumber = numberArr[i-1];
+                    break;
+                }
+            }
+            roman += romanArr[numberArr.indexOf(restNumber)];
+        }
+    }
+    return roman
   }
