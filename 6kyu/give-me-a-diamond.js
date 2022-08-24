@@ -24,21 +24,33 @@
 
 // "  *\n ***\n*****\n ***\n  *\n"
 
+
 // The solution
+function diamond (n) {
+    if (n <= 0 || n % 2 === 0) return null
+    str = ''
+    for (let i = 0; i < n; i++) { 
+      let len = Math.abs((n-2*i-1)/2)
+      str += ' '.repeat(len)
+      str += '*'.repeat(n-2*len)
+      str += '\n'
+    }
+    return str
+  }
+
+// The solution 2
 function diamond(n){
+    if(!(n%2) || n<1) return null
+    if(n==1) return '*\n'
     let diam = '';
     for(let i =1,j=0;i<((n/2));i++,j++){
-        diam += ' ' + '*'.repeat(i+j) + '/n';
+        diam += ' '.repeat(Math.floor(n/2)-j) + '*'.repeat(i+j) + '\n';
     }
-    // console.log(diam)
-    diam += ' ' + '*'.repeat(n) +'/n' + ' ';
-    // console.log(diam)
+    diam += '*'.repeat(n) +'\n';
     let lDiam = '';
-    for(let i =1,j=0;i<((n/2));i++,j++){
-        lDiam += ' ' + '*'.repeat(i+j) + '/n';
+    for(let i =0,j=1;i<Math.floor(n/2);i++,j++){
+        lDiam += ' '.repeat(j) + '*'.repeat((n-2)-(2*i)) + '\n';
     }
-    // console.log(lDiam)
-    // console.log(lDiam.split(' ').reverse().join(' '))
-    diam += lDiam.split(' ').reverse().join(' ')
-    return diam.trimEnd(); 
+    diam += lDiam
+    return diam;
 }
