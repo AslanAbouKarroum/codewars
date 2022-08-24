@@ -40,5 +40,5 @@ function diamond(n){
     // console.log(lDiam)
     // console.log(lDiam.split(' ').reverse().join(' '))
     diam += lDiam.split(' ').reverse().join(' ')
-    return diam;
+    return diam.trimEnd(); 
 }
