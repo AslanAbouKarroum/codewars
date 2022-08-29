@@ -20,3 +20,13 @@
 // s = "123456" gives "234561".
 
 // The solution
+function revrot(str, sz) {
+    if(!str||!sz||str.length<sz) return '';
+    let replace = '\\d{'+sz+'}';
+    let re = new RegExp(replace,"g");
+    return str.match(re).map((el,ind,arr)=>el.split('').reduce((acc,el)=>acc+el**3,0)%2 ? el.slice(1)+el[0]: el.split('').reverse().join('')).join('');
+}
+
+// The solution 2
+const revrot = (str, sz) =>
+  (str.match(new RegExp(`.{${sz}}`, `g`)) || []).map(val => val.replace(/[02468]/g, ``).length % 2 ? val.replace(/(.)(.+)/, `$2$1`) : [...val].reverse().join(``)).join(``);
