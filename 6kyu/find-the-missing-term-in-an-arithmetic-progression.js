@@ -7,3 +7,22 @@
 // PS: This is a sample question of the facebook engineer challenge on interviewstreet. I found it quite fun to solve on paper using math, derive the algo that way. Have fun!
 
 // The solution
+var findMissing = function (list) {
+    let diff = 0, progressive = 0, array = list.map((num,ind,arr)=>arr[ind+1]-num).slice(0,-1).sort((a,b)=>b-a);
+    let chosing_array = [Math.abs(array[0]),Math.abs(array[list.length-2])].sort((a,b)=>a-b);
+    if(array[0]==Math.abs(array[0])){
+      diff = chosing_array[1]
+      progressive = chosing_array[0]
+    }else{
+      diff = -chosing_array[1]
+      progressive = -chosing_array[0]
+    }
+    let index = list.map((num,ind,arr)=>arr[ind+1]-num).slice(0,-1).indexOf(diff)
+    return list[index] + progressive
+  }
+
+  // The solution 2
+  var findMissing = function (list) {
+    var step = (list[list.length - 1] - list[0]) / (list.length);
+    return list.filter(function(val, index) { return val !== (list[0] + index * step); })[0] - step;
+  }
