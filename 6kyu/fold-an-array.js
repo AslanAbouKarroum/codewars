@@ -29,3 +29,25 @@
 // I have created other katas. Have a look if you like coding and challenges.
 
 // The solution
+function foldArray(array, runs){
+    let result = array;
+    for(i=0;i<runs;i++){
+        result = result.map((num,ind,arr)=>{
+                     if(ind==Math.floor(arr.length/2)){
+                        return num = num
+                     }else{
+                        return num += arr[(arr.length-1)-ind];
+                     }
+                 }).slice(0,Math.ceil(result.length/2));
+    };
+    return result;
+}
+
+// The solution 2
+function foldArray(a, n) {
+    const r = [], c = a.slice();
+    while (c.length) r.push(c.pop() + (c.shift() || 0));
+    return n - 1 ? foldArray(r, n - 1) : r;
+  }
+
+  
