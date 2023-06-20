@@ -19,4 +19,15 @@
 // [1, 2, 33] is invalid because 33 is not a single-digit integer
 
 // The solution
-
+function upArray(arr){
+    if(arr.filter(e=>e>9||e<0).length !==0) {return null};
+    if(arr.length ==0) return null;
+    if(arr.filter(e=>e==9).length == arr.length) return (Number(arr.join(''))+1+'').split('').map(e=>Number(e));
+    if(arr.filter(e=>e==0).length == arr.length){
+        arr.pop()
+        let n = [1]
+        return arr.concat(...n)
+    };
+    let last_of_arr = arr.slice(arr.findLastIndex((e,i)=>e!==9))
+    return (arr.slice(0,arr.findLastIndex((e,i)=>e!==9))).concat(...(Number(last_of_arr.join(''))+1+'').split('').map(e=>Number(e)));
+};
