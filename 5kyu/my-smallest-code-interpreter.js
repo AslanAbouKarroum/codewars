@@ -24,3 +24,91 @@
 // Error-handling, e.g. unmatched square brackets and/or memory pointer going past the leftmost cell is not required in this Kata. If you see test cases that require you to perform error-handling then please open an Issue in the Discourse for this Kata (don't forget to state which programming language you are attempting this Kata in).
 
 // Solution
+function brainLuck(code, input){
+    console.log('input '+input)
+    console.log('length '+input.length)
+    let res = [];
+    let  arr_of_str=[];
+    let j=0;
+    let pointer=-1;
+    let counter = 0
+    for(let i=0;i<code.length;i++){
+        console.log('i '+i)
+        counter++
+        if(counter>59) break;
+        if(j>input.length) break;
+        switch(code[i]){
+            case ',':
+                if(res.length>pointer) pointer++
+                // pointer++
+                res.push(input.charCodeAt(j));
+                j++
+                break;
+            case '+':
+                console.log('+ '+res.map(e=>String.fromCharCode(e)))
+                console.log('pointer '+pointer)
+                if(pointer>=res.length) {console.log('zedna ma7al '+res);res[pointer]=0};
+                res[pointer]=res[pointer]+1;
+                if(res[pointer]==256) res[pointer]=0
+                break;
+            case '-':
+                console.log('- '+res.map(e=>String.fromCharCode(e)))
+                if(res.length==0){
+                    console.log('- '+res.length);
+                    break;
+                }else{
+                    console.log('pointer '+pointer)
+                    if(pointer>=res.length) {console.log('zedna ma7al '+res);res[pointer]=0};
+                    res[pointer]=res[pointer]-1;
+                    if(res[pointer]==-1) res[pointer]=255
+                }
+                break;
+            case '[':
+                console.log('[ '+res.map(e=>String.fromCharCode(e)))
+                let acc1=0;
+                if(res[pointer]==0) i =code.split('').findIndex((e,ind,a)=>{
+                    if(e=='['&&ind>i){
+                        acc1++
+                    }else if(e==']'&& acc1>0){
+                        acc1--
+                    }else if(e==']'&& acc1==0){
+                        return ind
+                    };
+                });
+                break;
+            case ']':
+                console.log('] '+res.map(e=>String.fromCharCode(e)))
+                if(res.length==0) break;
+                let acc2=0;
+                if(res[pointer] !=0) i =code.split('').findLastIndex((e,ind,a)=>{
+                    if(e==']'&&ind <i){
+                        acc2++
+                    }else if(e=='['&&acc2 !=0){
+                        acc2--
+                    }else if(e=='['&&acc2==0){
+                        return ind
+                    };
+                });
+                break;
+            case '.':
+                console.log('. ' +res.map(e=>String.fromCharCode(e)))
+                arr_of_str.push(res[pointer]);
+                break;
+            case '<':
+                console.log('< ' +res.map(e=>String.fromCharCode(e)))
+                pointer--
+                console.log('pointer '+pointer)
+                break;
+            case '>':
+                console.log('> ' +res.map(e=>String.fromCharCode(e)))
+                pointer++
+                console.log('pointer '+pointer)
+                break;
+            default:
+                console.log('default')
+                break;
+        };
+        console.log('end of for '+ res) // +res.map(e=>String.fromCharCode(e))
+    };
+    return 'return '+arr_of_str.map(e=>String.fromCharCode(e)).join('');
+};
