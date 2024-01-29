@@ -25,90 +25,115 @@
 
 // Solution
 function brainLuck(code, input){
-    console.log('input '+input)
-    console.log('length '+input.length)
+    var data = [],
+        pos  = 0,
+        ipos = 0,
+        output = [],
+        skipping = 0,
+        backwards = 0;
+  
+    var COMMANDS = {
+      '>': function() { ++pos },
+      '<': function() { --pos },
+      '+': function() { data[pos] = ((data[pos] || 0) + 1) % 256 },
+      '-': function() { data[pos] = ((data[pos] || 0) + 255) % 256 },
+      '.': function() { output.push(data[pos]) },
+      ',': function() { data[pos] = (input[ipos++] || '').charCodeAt() },
+      '[': function() { if (!data[pos]) { skipping = 1 } },
+      ']': function() { if (data[pos]) { backwards = 1 } }
+    };
+    
+    for (var cpos=0,l=code.length; cpos <= l; ++cpos) {
+      if (skipping) {
+        if (code[cpos] === '[') { skipping++ }
+        if (code[cpos] === ']') { skipping-- }
+      } else if (backwards) {
+        cpos -= 2;
+        if (code[cpos] === ']') { backwards++ }
+        if (code[cpos] === '[') { backwards-- }
+      } else {
+        code[cpos] && COMMANDS[code[cpos]]();
+      }
+    }
+  
+    return String.fromCharCode.apply(null, output)
+  }
+
+  // Solution (failed on time limit)
+  function brainLuck(code, input){
     let res = [];
     let  arr_of_str=[];
     let j=0;
     let pointer=-1;
-    let counter = 0
     for(let i=0;i<code.length;i++){
-        console.log('i '+i)
-        counter++
-        if(counter>59) break;
         if(j>input.length) break;
         switch(code[i]){
             case ',':
                 if(res.length>pointer) pointer++
-                // pointer++
                 res.push(input.charCodeAt(j));
                 j++
                 break;
             case '+':
-                console.log('+ '+res.map(e=>String.fromCharCode(e)))
-                console.log('pointer '+pointer)
-                if(pointer>=res.length) {console.log('zedna ma7al '+res);res[pointer]=0};
+                if(pointer>=res.length) {res[pointer]=0};
+                if(pointer ==-1){pointer=0;res=[0]};
+                if(res[pointer]==undefined){res[pointer]=0}
                 res[pointer]=res[pointer]+1;
                 if(res[pointer]==256) res[pointer]=0
                 break;
             case '-':
-                console.log('- '+res.map(e=>String.fromCharCode(e)))
                 if(res.length==0){
-                    console.log('- '+res.length);
                     break;
                 }else{
-                    console.log('pointer '+pointer)
-                    if(pointer>=res.length) {console.log('zedna ma7al '+res);res[pointer]=0};
+                    if(pointer>=res.length) {res[pointer]=0};
+                    if(pointer ==-1){pointer=0};
                     res[pointer]=res[pointer]-1;
+                    if(code[i-1]=='['&&code[i+1]==']'){res[pointer]=0}
                     if(res[pointer]==-1) res[pointer]=255
                 }
                 break;
             case '[':
-                console.log('[ '+res.map(e=>String.fromCharCode(e)))
                 let acc1=0;
+                let open_ind=-1;
                 if(res[pointer]==0) i =code.split('').findIndex((e,ind,a)=>{
-                    if(e=='['&&ind>i){
+                    if(e=='['&&ind!=i){
                         acc1++
-                    }else if(e==']'&& acc1>0){
+                    }else if(e==']'&&acc1!=open_ind){
                         acc1--
-                    }else if(e==']'&& acc1==0){
+                    }else if(e=='['&& ind==i){
+                        open_ind = acc1
+                    }else if(e==']'&& acc1==open_ind){
                         return ind
-                    };
+                    }
                 });
                 break;
             case ']':
-                console.log('] '+res.map(e=>String.fromCharCode(e)))
                 if(res.length==0) break;
                 let acc2=0;
-                if(res[pointer] !=0) i =code.split('').findLastIndex((e,ind,a)=>{
-                    if(e==']'&&ind <i){
-                        acc2++
-                    }else if(e=='['&&acc2 !=0){
-                        acc2--
-                    }else if(e=='['&&acc2==0){
-                        return ind
+                let close_ind=-1;
+                if(res[pointer] !=0) {i =code.split('').findLastIndex((e,ind,a)=>{
+                    if(e==']'&&ind !=i){
+                        acc2++;
+                    }else if(e=='['&&acc2 !=close_ind){
+                        acc2--;
+                    }else if(e==']'&&ind==i){
+                        close_ind =acc2;
+                    }else if(e=='['&&acc2==close_ind){
+                        return ind;
                     };
-                });
+                });}
                 break;
             case '.':
-                console.log('. ' +res.map(e=>String.fromCharCode(e)))
                 arr_of_str.push(res[pointer]);
                 break;
             case '<':
-                console.log('< ' +res.map(e=>String.fromCharCode(e)))
                 pointer--
-                console.log('pointer '+pointer)
                 break;
             case '>':
-                console.log('> ' +res.map(e=>String.fromCharCode(e)))
                 pointer++
-                console.log('pointer '+pointer)
                 break;
             default:
-                console.log('default')
                 break;
         };
-        console.log('end of for '+ res) // +res.map(e=>String.fromCharCode(e))
     };
-    return 'return '+arr_of_str.map(e=>String.fromCharCode(e)).join('');
+    return arr_of_str.map(e=>String.fromCharCode(e)).join('');
 };
