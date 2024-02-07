@@ -26,3 +26,64 @@
 // link for the board https://raw.githubusercontent.com/adrianeyre/codewars/master/Ruby/Authored/snakesandladdersboard.jpg
 
 // My Solution
+
+function SnakesLadders() {
+    this.turn = 1;
+    this.player1place = 0;
+    this.player2place = 0;
+    this.check=0;
+    this.board = {
+        2:38,
+        7:14,
+        8:31,
+        15:26,
+        16:6,
+        21:42,
+        28:84,
+        36:44,
+        46:25,
+        49:11,
+        51:67,
+        62:19,
+        64:60,
+        71:91,
+        74:53,
+        78:98,
+        87:94,
+        89:68,
+        92:88,
+        95:75,
+        99:80
+    }
+};
+
+SnakesLadders.prototype.play = function(die1, die2) {
+    console.log(die1 + ' '+die2)
+    if(this.turn==1){
+        if(this.check) return 'Game over!';
+        if(die1!==die2){this.turn=2};
+        if(this.player2place==100){ this.check=1;return 'Game over!'};
+        this.player1place = this.player1place+die1+die2;
+        if(this.player1place==100){
+            this.turn=2;
+            return 'Player 1 Wins!'
+        }else{
+            if(this.player1place>100) this.player1place = 100 -(this.player1place%100) 
+            if(this.board[this.player1place]) this.player1place = this.board[this.player1place]
+            return 'Player 1 is on square '+this.player1place;
+        };
+    }else if(this.turn==2){
+        if(this.check) return 'Game over!';
+        if(die1!==die2){this.turn=1};
+        if(this.player1place==100) { this.check=1;return 'Game over!'};
+        this.player2place = this.player2place+die1+die2;
+        if(this.player2place==100){
+            this.turn=1;
+            return 'Player 2 Wins!'
+        }else{
+            if(this.player2place>100) this.player2place = 100 -(this.player2place%100) 
+            if(this.board[this.player2place]) this.player2place = this.board[this.player2place]
+            return 'Player 2 is on square '+ this.player2place;
+        };
+    };
+};
