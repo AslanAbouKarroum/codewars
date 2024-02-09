@@ -58,6 +58,8 @@ function SnakesLadders() {
 };
 
 SnakesLadders.prototype.play = function(die1, die2) {
+    die1 = Math.ceil(Math.random()*6)
+    die2 = Math.ceil(Math.random()*6)
     console.log(die1 + ' '+die2)
     if(this.turn==1){
         if(this.check) return 'Game over!';
