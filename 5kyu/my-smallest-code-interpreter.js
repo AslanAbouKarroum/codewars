@@ -55,7 +55,6 @@ function brainLuck(code, input){
         code[cpos] && COMMANDS[code[cpos]]();
       }
     }
-  
     return String.fromCharCode.apply(null, output)
   }
 
