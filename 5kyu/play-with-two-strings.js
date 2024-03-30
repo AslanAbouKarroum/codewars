@@ -37,3 +37,21 @@ function workOnStrings(a,b){
     b= workOnString(b,a)
     return a+b;
 };
+
+// Solution
+// Case insensitive letter occurrences count
+const count = str => str
+				.toLowerCase()
+				.split('')
+				.reduce((R, x) => (R[x] = (R[x]||0) + 1, R), {});
+
+// Invert character case
+const changeCase = char => char > 'Z' ? char.toUpperCase() : char.toLowerCase();
+
+// Rule-based string processing
+const strConv = (str, rules) => str
+				.split('')
+				.map(x => rules[x.toLowerCase()] % 2 ? changeCase(x) : x)
+				.join('');
+
+const workOnStrings = (a, b) => strConv(a, count(b)) + strConv(b, count(a));
