@@ -88,14 +88,10 @@ function execute(code) {
         }
     });
     code = code.flat().filter(e=>{if(e&&e!='0')return e});
-    console.log(code);
     let index = 0;
     let inside_index = 0;
     let orientation = 'right';
     for(let i=0;i<code.length;i++){
-        //console.log('orientation at start of  '+i+ ' : '+ orientation)
-        //console.log('index ' +index)
-        //console.log('inside_index ' + inside_index)
         switch (code[i]){
             case 'L' :
                 if(orientation == 'right'){
@@ -107,7 +103,6 @@ function execute(code) {
                 }else if(orientation == 'down'){
                     orientation = 'right'
                 };
-                //console.log(display)
                 break;
             case 'R' :
                 if(orientation == 'left'){
@@ -119,7 +114,6 @@ function execute(code) {
                 }else if(orientation == 'up'){
                     orientation = 'right'
                 };
-                //console.log(display)
                 break;
             case 'F' :
                 if(orientation == 'right'){
@@ -130,16 +124,11 @@ function execute(code) {
                             display.map(e=>e.push(' '))
                             n++
                         };
-                        if(!display[index][inside_index]){//
-                            //console.log('this shouldn\'t appear')
-                            display[index].push('*');
-                        }else if(display[index][inside_index]==' '){
+                        if(display[index][inside_index]==' '){
                             display[index][inside_index]='*'
                         }
                     }else{
-                        if(!display[index][inside_index]){// ||
-                            // display[index].push('*');
-                            // console.log('this shouldn\'t appear 2')
+                        if(!display[index][inside_index]){
                             display.map((e,i,ar)=>{
                                 if(i==index){
                                     return e.push('*')
@@ -154,16 +143,7 @@ function execute(code) {
                 }else if(orientation == 'left'){
                     inside_index--;
                     if(inside_index>display[index].length){
-                        let n = display[index].length;
-                        while(n<inside_index){
-                            //console.log('this shouldn\'t appear 3')
-                            display.map(e=>e.push(' '))
-                            n++
-                        };
-                        if(!display[index][inside_index]){// ||
-                            //console.log('this shouldn\'t appear 4')
-                            display[index].push('*');
-                        }else if(display[index][inside_index]==' '){
+                        if(display[index][inside_index]==' '){
                             display[index][inside_index]='*';
                         }
                     }else if(inside_index<0){
@@ -175,12 +155,8 @@ function execute(code) {
                                 return e.unshift(' ')
                             }
                         })
-                       // display[index].unshift('*');
                     }else{
-                        if(!display[index][inside_index]){// ||
-                            //console.log('this shouldn\'t appear 5')
-                            display[index].push('*');
-                        }else if(display[index][inside_index]==' '){
+                        if(display[index][inside_index]==' '){
                             display[index][inside_index]='*'
                         }
                     }
@@ -196,10 +172,7 @@ function execute(code) {
                             display.map(e=>e.push(' '))
                             n++
                         };
-                        if(!display[index][inside_index]){// ||
-                            //console.log('this shouldn\'t appear 6')
-                            display[index].push('*');
-                        }else if(display[index][inside_index]==' '){
+                        if(display[index][inside_index]==' '){
                             display[index][inside_index]='*';
                         }
                     }else{
@@ -222,28 +195,18 @@ function execute(code) {
                             display.map(e=>e.push(' '))
                             n++
                         };
-                        if(!display[index][inside_index]){// ||
-                            //console.log('this shouldn\'t appear 8')
-                            display[index].push('*');
-                        }else if(display[index][inside_index]==' '){
+                        if(display[index][inside_index]==' '){
                             display[index][inside_index]='*';
                         }
                     }else{
-                        if(!display[index][inside_index]){// ||
-                           // console.log('this shouldn\'t appear 9')
-                            display[index].push('*');
-                        }else if(display[index][inside_index]==' '){
+                        if(display[index][inside_index]==' '){
                             display[index][inside_index]='*'
                         }
                     }
-
                 }
-                //console.log(display)
                 break;
         }
-       // console.log('orientation at end of  '+i+ ' : '+ orientation)
     };
-    //console.log(display);
     return display.map(e=>e.join('')).join('\r\n')
 };
 
