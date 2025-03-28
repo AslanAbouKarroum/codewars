@@ -18,3 +18,103 @@
 // The columns are numbered 0-6 left to right.
 
 // My Solution
+function Connect4 (){
+    this.arr = [[0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0]];
+    this.currentPlayer = 2;
+    this.game_check = 0;
+};
+  
+Connect4.prototype.play = function (col){
+    this.currentPlayer == 1 ? this.currentPlayer=2 : this.currentPlayer=1;
+    if(this.game_check) return "Game has finished!";
+    let check = 0;
+    for(let i=5;i>=0;i--){
+        if(this.arr[i][col]==0){
+            this.arr[i][col]=this.currentPlayer; 
+            check = 1;
+            break;
+        };
+    };
+    if(check==0) return "Column full!";
+    if(this.check_vertical()){ this.game_check=1; return `Player ${this.currentPlayer} wins!`};
+    if(this.check_horizontal()){ this.game_check=1; return `Player ${this.currentPlayer} wins!`};
+    if(this.check_diagonal()){ this.game_check=1; return `Player ${this.currentPlayer} wins!`};
+    return `Player ${this.currentPlayer} has a turn`;
+};
+
+Connect4.prototype.check_vertical = function(){
+    for(let i=0;i<7;i++){
+        let check = 0;
+        for(let j=0;j<6;j++){
+            if(this.arr[j][i]==this.currentPlayer){
+                check++
+                if(check==4) return true;
+            }else{
+                check=0;
+            }
+        };
+    };
+    return false;
+};
+
+Connect4.prototype.check_horizontal = function(){
+    for(let i=0;i<6;i++){
+        let check = 0;
+        for(let j=0;j<7;j++){
+            if(this.arr[i][j]==this.currentPlayer){
+                check++
+                if(check==4) return true;
+            }else{
+                check=0;
+            };
+        };
+    };
+    return false;
+};
+
+Connect4.prototype.check_diagonal = function(){
+    let winning_cases = [[this.arr[0][3], this.arr[1][2], this.arr[2][1], this.arr[3][0]], // /
+                         [this.arr[0][4], this.arr[1][3], this.arr[2][2], this.arr[3][1]],
+                         [this.arr[0][5], this.arr[1][4], this.arr[2][3], this.arr[3][2]],
+                         [this.arr[0][6], this.arr[1][5], this.arr[2][4], this.arr[3][3]],
+                         [this.arr[1][3], this.arr[2][2], this.arr[3][1], this.arr[4][0]],
+                         [this.arr[1][4], this.arr[2][3], this.arr[3][2], this.arr[4][1]],
+                         [this.arr[1][5], this.arr[2][4], this.arr[3][3], this.arr[4][2]],
+                         [this.arr[1][6], this.arr[2][5], this.arr[3][4], this.arr[4][3]],
+                         [this.arr[2][3], this.arr[3][2], this.arr[4][1], this.arr[5][0]],
+                         [this.arr[2][4], this.arr[3][3], this.arr[4][2], this.arr[5][1]],
+                         [this.arr[2][5], this.arr[3][4], this.arr[4][3], this.arr[5][2]],
+                         [this.arr[2][6], this.arr[3][5], this.arr[4][4], this.arr[5][3]],
+                         [this.arr[0][0], this.arr[1][1], this.arr[2][2], this.arr[3][3]],// \
+                         [this.arr[0][1], this.arr[1][2], this.arr[2][3], this.arr[3][4]],
+                         [this.arr[0][2], this.arr[1][3], this.arr[2][4], this.arr[3][5]],
+                         [this.arr[0][3], this.arr[1][4], this.arr[2][5], this.arr[3][6]],
+                         [this.arr[1][0], this.arr[2][1], this.arr[3][2], this.arr[4][3]],
+                         [this.arr[1][1], this.arr[2][2], this.arr[3][3], this.arr[4][4]],
+                         [this.arr[1][2], this.arr[2][3], this.arr[3][4], this.arr[4][5]],
+                         [this.arr[1][3], this.arr[2][4], this.arr[3][5], this.arr[4][6]],
+                         [this.arr[2][0], this.arr[3][1], this.arr[4][2], this.arr[5][3]],
+                         [this.arr[2][1], this.arr[3][2], this.arr[4][3], this.arr[5][4]],
+                         [this.arr[2][2], this.arr[3][3], this.arr[4][4], this.arr[5][5]],
+                         [this.arr[2][3], this.arr[3][4], this.arr[4][5], this.arr[5][6]]];
+
+    for(let i=0;i<winning_cases.length;i++){
+        let check=0;
+        for(let j=0;j<winning_cases[i].length;j++){
+            if(winning_cases[i][j]==this.currentPlayer){
+                check++
+                if(check==4){
+                    return true;
+                }
+            }else{
+                    check = 0;
+            };
+        };
+    };
+    return false;
+};
