@@ -22,10 +22,11 @@ function Board({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares);
   }
 
+
   const winner = calculateWinner(squares);
   let status;
   if (winner) {
-    status = "Winner: " + winner;
+    status = "Winner: " + winner[0];
   } else {
     status = "Next player: " + (xIsNext ? "X" : "O");
   }
@@ -48,29 +49,26 @@ function Board({ xIsNext, squares, onPlay }) {
       ))}
     </>
   );
-  
 }
+
 
 export default function Game() {
   const [currentMove, setCurrentMove] = useState(0);
   const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [win, Setwin] = useState(false);
   const currentSquares = history[currentMove];
   const xIsNext = currentMove % 2 === 0;
+  let order = true;
 
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
   }
-
-  function jumpTo(nextMove) {
-    setCurrentMove(nextMove);
-  }
-
-  const moves = history.map((squares, move) => {
+  const moves= history.map((squares, move) => {
     let description;
     if(move==history.length-1){
-      description = "You are at move #"+move;
+      description = "You are at move # " + move;
     } else if (move > 0) {
       description = "Go to move " + move;
     } else {
@@ -85,7 +83,20 @@ export default function Game() {
        {button}
       </li>
     );
-  });
+  })
+
+  function reverse_order(){
+    order = !order;
+    if(!order){
+      document.getElementById('reverse_button').style['flex-direction']='column-reverse'
+    }else{
+      document.getElementById('reverse_button').style['flex-direction']='column'
+    }
+  }
+
+  function jumpTo(nextMove) {
+    setCurrentMove(nextMove);
+  }
 
   return (
     <div className="game">
@@ -93,7 +104,10 @@ export default function Game() {
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
-        <ol>{moves}</ol>
+        <button onClick={reverse_order}>
+          Toggle
+        </button>
+        <ol  id="reverse_button">{moves}</ol>
       </div>
     </div>
   );
@@ -113,7 +127,7 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return [squares[a], lines[i]];
     }
   }
   return null;

@@ -89,3 +89,7 @@
     margin-left: 20px;
   }
   
+  ol{
+    display: flex;
+    flex-direction: column;
+  }
