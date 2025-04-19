@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { use, useState } from "react";
 
-function Square({ value, onSquareClick }) {
+function Square({ value, onSquareClick, highlight}) {
   return (
-    <button className="square" onClick={onSquareClick}>
+    <button className={`square ${highlight? "highlight": ""}`} onClick={onSquareClick}>
       {value}
     </button>
   );
 }
 
-function Board({ xIsNext, squares, onPlay }) {
+function Board({ xIsNext, squares, onPlay}) {
   function handleClick(i) {
     if (calculateWinner(squares) || squares[i]) {
       return;
@@ -19,16 +19,22 @@ function Board({ xIsNext, squares, onPlay }) {
     } else {
       nextSquares[i] = "O";
     }
-    onPlay(nextSquares);
+    onPlay(nextSquares, i);
   }
 
 
   const winner = calculateWinner(squares);
+  let winningLine= [];
   let status;
   if (winner) {
     status = "Winner: " + winner[0];
+    winningLine = winner[1]
   } else {
-    status = "Next player: " + (xIsNext ? "X" : "O");
+    if(squares.filter(e=>e!=null).length==9){
+       status = "It's a draw"
+    }else{
+      status = "Next player: " + (xIsNext ? "X" : "O");
+    }
   }
   return (
     <>
@@ -37,11 +43,13 @@ function Board({ xIsNext, squares, onPlay }) {
         <div className="board-row" key={row}>
           {[0, 1, 2].map((col) => {
             const i = row * 3 + col;
+            const highlight = winningLine.includes(i)
             return (
               <Square
                 key={i}
                 value={squares[i]}
                 onSquareClick={() => handleClick(i)}
+                highlight={highlight}
               />
             );
           })}
@@ -55,22 +63,34 @@ function Board({ xIsNext, squares, onPlay }) {
 export default function Game() {
   const [currentMove, setCurrentMove] = useState(0);
   const [history, setHistory] = useState([Array(9).fill(null)]);
-  const [win, Setwin] = useState(false);
+  const [index, setIndex] = useState([]);
   const currentSquares = history[currentMove];
   const xIsNext = currentMove % 2 === 0;
   let order = true;
-
-  function handlePlay(nextSquares) {
+  let index_table = {
+    0: "row 1 col 1",
+    1: "row 1 col 2",
+    2: "row 1 col 3",
+    3: "row 2 col 1",
+    4: "row 2 col 2",
+    5: "row 2 col 3",
+    6: "row 3 col 1",
+    7: "row 3 col 2",
+    8: "row 3 col 3",
+  };
+  function handlePlay(nextSquares, ind) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
+    setIndex([...index.slice(0,currentMove), index_table[ind]]);
   }
+
   const moves= history.map((squares, move) => {
     let description;
-    if(move==history.length-1){
-      description = "You are at move # " + move;
+    if(move==history.length-1 && move!=0){
+      description = "You are at move # " + move + ' '+index[move-1];
     } else if (move > 0) {
-      description = "Go to move " + move;
+      description = "Go to move " + move+ ' '+index[move-1];
     } else {
       description = "Go to game start";
     }
