@@ -15,6 +15,14 @@
 // [ 1, 2, 3] returns 2 because here j = 2 and i = 0 and 2 - 0 = 2
 
 // My Solution
-var largestDifference = function(data) {
-    // TODO: Program solution
+const largestDifference = function(data) {
+    let max=0;
+    data.forEach((e,i,ar)=>{
+        for(let j=i+1;j<ar.length;j++){
+            if(ar[j]-e>=0&&j-i>max){
+                max= j-i;
+            };
+        };
+    });
+    return max;
 };
